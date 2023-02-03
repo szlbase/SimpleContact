@@ -9,7 +9,7 @@ import UIKit
 
 class ContactCell: UITableViewCell {
 
-    @IBOutlet weak var profilePictureIV: UIImageView!
+    @IBOutlet weak var profilePictureIV: CustomImageView!
     @IBOutlet weak var nameLbl: UILabel!
     
     
@@ -21,6 +21,7 @@ class ContactCell: UITableViewCell {
         profilePictureIV.layer.borderColor = UIColor.white.cgColor
         profilePictureIV.layer.cornerRadius = self.frame.size.width/2
         profilePictureIV.clipsToBounds = true
+        profilePictureIV.maskCircle(anyImage: UIImage(named: "hugh"))
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
