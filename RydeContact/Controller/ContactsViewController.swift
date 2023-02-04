@@ -17,7 +17,7 @@ class ContactsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(UINib(nibName: "ContactCell", bundle: nil), forCellReuseIdentifier: "ContactCell")
+        tableView.register(UINib(nibName: K.contactCellItem, bundle: nil), forCellReuseIdentifier: K.contactCellItem)
         tableView.rowHeight = 80
 
     }
@@ -39,7 +39,7 @@ class ContactsViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> ContactCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ContactCell", for: indexPath) as! ContactCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: K.contactCellItem, for: indexPath) as! ContactCell
         
         if let firstName = contacts[indexPath.row].first_name, let lastName = contacts[indexPath.row].last_name {
             cell.nameLbl.text = firstName + " " + lastName
@@ -48,7 +48,7 @@ class ContactsViewController: UITableViewController {
         if let urlString = contacts[indexPath.row].avartar, let url = URL(string: urlString) {
             cell.profilePictureIV.load(url: url)
         } else {
-            cell.profilePictureIV.image = UIImage(systemName: "person.circle.fill")
+            cell.profilePictureIV.image = UIImage(systemName: K.defaultProfileImage)
         }
         
         return cell
@@ -59,12 +59,12 @@ class ContactsViewController: UITableViewController {
     //MARK: - TableView Delegate Methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "goToContactDetails", sender: self)
+        performSegue(withIdentifier: K.goToContactDetailsSegue, sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == "goToContactDetails" {
+        if segue.identifier == K.goToContactDetailsSegue {
             let destinationVC = segue.destination as! ContactDetailsViewController
             
             if let indexPath = tableView.indexPathForSelectedRow {
@@ -75,6 +75,7 @@ class ContactsViewController: UITableViewController {
     
 }
 
+//MARK: Database related methods
 extension ContactsViewController {
     func loadContactIntoDatabase(completion: @escaping(_ success: Bool) -> ()) {
         networkMgr.fetchApiInfo { success in
@@ -92,7 +93,7 @@ extension ContactsViewController {
                             
                         }
                         self.saveContext()
-                        UserDefaults.standard.set(true, forKey: "hasLaunchBefore")
+                        UserDefaults.standard.set(true, forKey: K.hasLaunchKey)
                         completion(true)
                         return
                     } else {
@@ -106,7 +107,7 @@ extension ContactsViewController {
     
     func loadContacts() {
             
-        let hasLaunchBefore = UserDefaults.standard.bool(forKey: "hasLaunchBefore")
+        let hasLaunchBefore = UserDefaults.standard.bool(forKey: K.hasLaunchKey)
         
         if hasLaunchBefore {
             fetchFromDb()

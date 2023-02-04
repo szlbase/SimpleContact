@@ -9,7 +9,7 @@ import Foundation
 
 class NetworkManager: ObservableObject {
     
-    let urlString = "https://reqres.in/api/users"
+    let urlString = K.apiURL
     
     var contacts = [Contacts]()
     var totalContacts = 0
@@ -42,7 +42,7 @@ class NetworkManager: ObservableObject {
     
     func fetchContacts(per_page: Int = 10, completion: @escaping (_ success: Bool) -> Void) {
         if let url = URL(string: urlString)?.appending(queryItems: [
-            URLQueryItem(name: "per_page", value: String(per_page))
+            URLQueryItem(name: K.apiQueryPerPage, value: String(per_page))
         ]) {
             
             let session = URLSession(configuration: .default)
@@ -70,11 +70,11 @@ class NetworkManager: ObservableObject {
     
     func createContact(firstName: String, lastName: String, completion: @escaping (_ success: Bool, _ response: [String: Any]?) -> Void) {
         let body: [String: AnyHashable] = [
-            "first_name": firstName,
-            "last_name": lastName
+            K.apiBodyFirstName: firstName,
+            K.apiBodyLastName: lastName
         ]
-        let url = "https://reqres.in/api/users"
-        request(method: "POST", body: body, url: url, header: "application/json") { data, response  in
+        let url = K.apiURL
+        request(method: K.methods.post, body: body, url: url, header: K.apiHeader) { data, response  in
             
             guard let data = data else { return }
             
@@ -90,12 +90,12 @@ class NetworkManager: ObservableObject {
     
     func updateContact(firstName: String, lastName: String, id: Int, completion: @escaping (_ success: Bool, _ response: [String: Any]?) -> Void) {
         let body: [String: String] = [
-            "first_name": firstName,
-            "last_name": lastName
+            K.apiBodyFirstName: firstName,
+            K.apiBodyLastName: lastName
         ]
         let url = "https://reqres.in/api/users/\(id)"
         
-        request(method: "PUT", body: body, url: url, header: "application/json") { data, response  in
+        request(method: K.methods.put, body: body, url: url, header: K.apiHeader) { data, response  in
             
             guard let data = data else { return }
             
@@ -119,7 +119,7 @@ class NetworkManager: ObservableObject {
     
     func deleteContact(id: Int, completion: @escaping(_ success: Bool) -> Void) {
         let url = "https://reqres.in/api/users/\(id)"
-        request(method: "DELETE", body: nil, url: url, header: nil) { _, response in
+        request(method: K.methods.delete, body: nil, url: url, header: nil) { _, response in
             if let response = response as? HTTPURLResponse {
                 if response.statusCode == 204 {
                     completion(true)
@@ -154,12 +154,5 @@ class NetworkManager: ObservableObject {
             task.resume()
         }
     }
- 
-    //        NetworkManager.shared.updateContact(firstName: "Shi Zheng", lastName: "Lin", id: 1) { success, response in
-    //            if success {
-    //                //Update inside database
-    //                print("Updated successfully")
-    //            }
-    //        }
             
 }

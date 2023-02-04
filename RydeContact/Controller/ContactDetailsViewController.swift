@@ -36,7 +36,7 @@ class ContactDetailsViewController: UIViewController {
         innerSV.layoutMargins = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         innerSV.isLayoutMarginsRelativeArrangement = true
         
-        profilePictureIV.maskCircle(anyImage: UIImage(systemName: "person.circle.fill"))
+        profilePictureIV.maskCircle(anyImage: UIImage(systemName: K.defaultProfileImage))
         
         updateUI()
     }
@@ -48,7 +48,7 @@ class ContactDetailsViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goToEdit" {
+        if segue.identifier == K.goToEditSegue {
             let destinationVC = segue.destination as! AddEditContactDetailsViewController
             destinationVC.selectedContact = selectedContact
             destinationVC.isEdit = true

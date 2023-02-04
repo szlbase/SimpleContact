@@ -34,9 +34,28 @@ class AddEditContactDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        profilePictureIV.maskCircle(anyImage: UIImage(systemName: "person.circle.fill"))
+        profilePictureIV.maskCircle(anyImage: UIImage(systemName: K.defaultProfileImage))
         
         updateUI()
+    }
+    
+    @IBAction func doneBtnClicked(_ sender: UIBarButtonItem) {
+        if let firstName = firstNameTF.text, let lastName = lastNameTF.text {
+            if isEdit {
+                if let id = selectedContact?.id {
+                    updateContact(firstName: firstName, lastName: lastName, id: Int(id))
+                }
+            } else {
+                let trimmedFirstName = firstName.trimmingCharacters(in: .whitespacesAndNewlines)
+                let trimmedLastName = lastName.trimmingCharacters(in: .whitespacesAndNewlines)
+                
+                if trimmedFirstName.count > 0 || trimmedLastName.count > 0 {
+                    addNewContact(firstName: trimmedFirstName, lastName: trimmedLastName)
+                } else {
+                    displayWarning()
+                }
+            }
+        }
     }
     
     func loadContact() {
@@ -71,31 +90,12 @@ class AddEditContactDetailsViewController: UIViewController {
         }
     }
     
-    @IBAction func doneBtnClicked(_ sender: UIBarButtonItem) {
-        if let firstName = firstNameTF.text, let lastName = lastNameTF.text {
-            if isEdit {
-                if let id = selectedContact?.id {
-                    updateContact(firstName: firstName, lastName: lastName, id: Int(id))
-                }
-            } else {
-                let trimmedFirstName = firstName.trimmingCharacters(in: .whitespacesAndNewlines)
-                let trimmedLastName = lastName.trimmingCharacters(in: .whitespacesAndNewlines)
-                
-                if trimmedFirstName.count > 0 || trimmedLastName.count > 0 {
-                    addNewContact(firstName: trimmedFirstName, lastName: trimmedLastName)
-                } else {
-                    displayWarning()
-                }
-            }
-        }
-    }
-    
     func addNewContact(firstName: String, lastName: String) {
         
         networkMgr.createContact(firstName: firstName, lastName: lastName) { success, response in
             if success {
 
-                if let response = response, let firstName = response["first_name"] as? String, let lastName = response["last_name"] as? String, let id = response["id"] as? String {
+                if let response = response, let firstName = response[K.apiBodyFirstName] as? String, let lastName = response[K.apiBodyLastName] as? String, let id = response[K.apiBodyId] as? String {
                     
                     print("Create user : \(lastName) \(firstName) with \(id) successfully.")
                     
@@ -128,8 +128,6 @@ class AddEditContactDetailsViewController: UIViewController {
                 DispatchQueue.main.async {
                     _ = self.navigationController?.popToRootViewController(animated: true)
                 }
-            } else {
-                print("Contact not inside API")
             }
         }
     }

@@ -21,7 +21,7 @@ class ContactCell: UITableViewCell {
         profilePictureIV.layer.borderColor = UIColor.white.cgColor
         profilePictureIV.layer.cornerRadius = self.frame.size.width/2
         profilePictureIV.clipsToBounds = true
-        profilePictureIV.maskCircle(anyImage: UIImage(systemName: "person.circle.fill"))
+        profilePictureIV.maskCircle(anyImage: UIImage(systemName: K.defaultProfileImage))
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
