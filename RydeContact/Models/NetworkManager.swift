@@ -154,4 +154,12 @@ class NetworkManager: ObservableObject {
             task.resume()
         }
     }
+ 
+    //        NetworkManager.shared.updateContact(firstName: "Shi Zheng", lastName: "Lin", id: 1) { success, response in
+    //            if success {
+    //                //Update inside database
+    //                print("Updated successfully")
+    //            }
+    //        }
+            
 }

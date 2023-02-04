@@ -25,8 +25,8 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="7pU-0G-J9K">
                                                 <rect key="frame" x="0.0" y="0.0" width="393" height="406"/>
                                                 <subviews>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HfO-tR-2ks" customClass="CustomImageView" customModule="RydeContact" customModuleProvider="target">
-                                                        <rect key="frame" x="96.666666666666686" y="0.0" width="200" height="200"/>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="HfO-tR-2ks" customClass="CustomImageView" customModule="RydeContact" customModuleProvider="target">
+                                                        <rect key="frame" x="96.666666666666686" y="1" width="200" height="198.66666666666666"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="200" id="6y9-Hh-OKh"/>
                                                             <constraint firstAttribute="width" constant="200" id="xmk-Qf-ukT"/>
@@ -157,7 +157,7 @@
                     <navigationItem key="navigationItem" id="WL3-4H-S09">
                         <barButtonItem key="rightBarButtonItem" systemItem="edit" id="5a3-Pw-JAi">
                             <connections>
-                                <segue destination="Gi4-Ez-6vb" kind="show" id="kWe-Pl-M4a"/>
+                                <segue destination="Gi4-Ez-6vb" kind="show" identifier="goToEdit" id="kWe-Pl-M4a"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -190,12 +190,13 @@
                     <navigationItem key="navigationItem" id="MAB-MB-cb3">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="riW-tt-Olc">
                             <connections>
-                                <segue destination="Gi4-Ez-6vb" kind="show" id="CBk-IH-PUZ"/>
+                                <action selector="addBtnClicked:" destination="O0C-UD-STv" id="k4y-o3-f2O"/>
+                                <segue destination="Gi4-Ez-6vb" kind="show" identifier="goToAdd" id="6kY-ds-EJz"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="ZAh-qe-iXg" kind="show" id="pbr-7L-3Jn"/>
+                        <segue destination="ZAh-qe-iXg" kind="show" identifier="goToContactDetails" id="pbr-7L-3Jn"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vCk-F6-Lct" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -233,8 +234,8 @@
                             <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jBo-4A-94j">
                                 <rect key="frame" x="0.0" y="103" width="393" height="200"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="P2z-Yz-PW2" customClass="CustomImageView" customModule="RydeContact" customModuleProvider="target">
-                                        <rect key="frame" x="96.666666666666686" y="0.0" width="200" height="200"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="P2z-Yz-PW2" customClass="CustomImageView" customModule="RydeContact" customModuleProvider="target">
+                                        <rect key="frame" x="96.666666666666686" y="1" width="200" height="198.66666666666666"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="200" id="6NQ-C0-cYF"/>
                                             <constraint firstAttribute="width" constant="200" id="83c-2R-ios"/>
@@ -355,10 +356,17 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="aiz-8p-JCS">
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="X22-9y-Z0F"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="X22-9y-Z0F">
+                            <connections>
+                                <action selector="doneBtnClicked:" destination="Gi4-Ez-6vb" id="YHe-Cs-riC"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="firstNameTF" destination="OiT-D6-IyH" id="hfe-Wa-B5m"/>
                         <outlet property="idTf" destination="Neq-aa-Yo2" id="29j-qQ-NKu"/>
+                        <outlet property="idView" destination="rTg-NU-zv6" id="Sdg-2V-9qt"/>
+                        <outlet property="lastNameTF" destination="Gid-h8-FCQ" id="my6-Yq-NEY"/>
                         <outlet property="profilePictureIV" destination="P2z-Yz-PW2" id="kOd-y8-RGJ"/>
                     </connections>
                 </viewController>
@@ -368,11 +376,12 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="CBk-IH-PUZ"/>
+        <segue reference="kWe-Pl-M4a"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="envelope.fill" catalog="system" width="128" height="93"/>
         <image name="message.fill" catalog="system" width="128" height="114"/>
+        <image name="person.circle.fill" catalog="system" width="128" height="123"/>
         <image name="phone.fill" catalog="system" width="128" height="114"/>
         <image name="star" catalog="system" width="128" height="116"/>
         <systemColor name="separatorColor">

@@ -12,43 +12,21 @@ class ContactsViewController: UITableViewController {
     
     let networkMgr = NetworkManager.shared
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var contacts : [ContactDB] = []
+    var contacts = [ContactDB]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.register(UINib(nibName: "ContactCell", bundle: nil), forCellReuseIdentifier: "ContactCell")
         tableView.rowHeight = 80
+
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        super.viewWillAppear(animated)
         
         loadContacts()
-
-//
-//        NetworkManager.shared.createContact(firstName: "ShiZheng", lastName: "Lin") { success, response in
-//            if success {
-//                //Store inside database
-//
-//                if let response = response, let firstName = response["first_name"], let lastName = response["last_name"] {
-//                    print("Create user : \(lastName) \(firstName) successfully.")
-//                }
-//
-//            }
-//        }
-//
-//        NetworkManager.shared.deleteContact(id: 1) { success in
-//            if success {
-//                //Delete from database
-//                print("Delete successfully")
-//            }
-//        }
-//
-//        NetworkManager.shared.updateContact(firstName: "Shi Zheng", lastName: "Lin", id: 1) { success, response in
-//            if success {
-//                //Update inside database
-//                print("Updated successfully")
-//            }
-//        }
-        
-        
     }
     
     //MARK: - TableView Datasource Methods
@@ -67,6 +45,11 @@ class ContactsViewController: UITableViewController {
             cell.nameLbl.text = firstName + " " + lastName
         }
         
+        if let urlString = contacts[indexPath.row].avartar, let url = URL(string: urlString) {
+            cell.profilePictureIV.load(url: url)
+        } else {
+            cell.profilePictureIV.image = UIImage(systemName: "person.circle.fill")
+        }
         
         return cell
         
@@ -76,14 +59,24 @@ class ContactsViewController: UITableViewController {
     //MARK: - TableView Delegate Methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        performSegue(withIdentifier: "goToContactDetails", sender: self)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "goToContactDetails" {
+            let destinationVC = segue.destination as! ContactDetailsViewController
+            
+            if let indexPath = tableView.indexPathForSelectedRow {
+                destinationVC.selectedContact = contacts[indexPath.row]
+            }
+        }
+    }
     
 }
 
 extension ContactsViewController {
-    func loadContactIntoDatabase(completion: @escaping() -> ()) {
+    func loadContactIntoDatabase(completion: @escaping(_ success: Bool) -> ()) {
         networkMgr.fetchApiInfo { success in
             if success {
                 self.networkMgr.fetchContacts(per_page: self.networkMgr.totalContacts) { success in
@@ -97,12 +90,14 @@ extension ContactsViewController {
                             newContact.last_name = contact.last_name
                             newContact.avartar = contact.avatar
                             
-                            self.saveContext()
-                            
                         }
-                        
+                        self.saveContext()
                         UserDefaults.standard.set(true, forKey: "hasLaunchBefore")
-                        completion()
+                        completion(true)
+                        return
+                    } else {
+                        completion(false)
+                        return
                     }
                 }
             }
@@ -116,11 +111,15 @@ extension ContactsViewController {
         if hasLaunchBefore {
             fetchFromDb()
         } else {
-            loadContactIntoDatabase {
-                self.fetchFromDb()
+            loadContactIntoDatabase { success in
+                if success {
+                    self.fetchFromDb()
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                }
             }
         }
-        
         tableView.reloadData()
     }
     
@@ -129,17 +128,17 @@ extension ContactsViewController {
         
         do{
             contacts = try context.fetch(request)
-            print(contacts.count)
         } catch {
-            print("Error loading categories \(error)")
+            print("Error loading contact \(error)")
         }
+        
     }
     
     func saveContext() {
         do {
             try context.save()
         } catch {
-            print("Error saving category \(error)")
+            print("Error saving contact \(error)")
         }
         
     }
