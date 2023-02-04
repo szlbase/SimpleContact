@@ -368,6 +368,7 @@
                         <outlet property="idView" destination="rTg-NU-zv6" id="Sdg-2V-9qt"/>
                         <outlet property="lastNameTF" destination="Gid-h8-FCQ" id="my6-Yq-NEY"/>
                         <outlet property="profilePictureIV" destination="P2z-Yz-PW2" id="kOd-y8-RGJ"/>
+                        <outlet property="profilePictureView" destination="jBo-4A-94j" id="jnC-q9-JV4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4E8-4n-RF6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

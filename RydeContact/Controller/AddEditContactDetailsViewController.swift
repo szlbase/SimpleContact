@@ -11,6 +11,7 @@ import UIKit
 class AddEditContactDetailsViewController: UIViewController {
     
     @IBOutlet weak var profilePictureIV: CustomImageView!
+    @IBOutlet weak var profilePictureView: UIView!
     @IBOutlet weak var idTf: UILabel!
     @IBOutlet weak var idView: UIView!
     @IBOutlet weak var firstNameTF: UITextField!
@@ -34,6 +35,7 @@ class AddEditContactDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        profilePictureView.backgroundColor = UIColor(patternImage: UIImage(named: "green_gradient")!)
         profilePictureIV.maskCircle(anyImage: UIImage(systemName: K.defaultProfileImage))
         
         updateUI()
